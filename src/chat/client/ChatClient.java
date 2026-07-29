@@ -42,6 +42,7 @@ public class ChatClient {
 
       
             Thread listener = new Thread(() -> listenForMessages(in, quitting));
+            listener.setDaemon(true);
             listener.start();
 
             System.out.println("Команды: /list — кто в сети, /w ник текст — личное сообщение, /quit — выход\n");
@@ -69,7 +70,9 @@ public class ChatClient {
                 System.out.println(strip(line));
             }
         } catch (IOException e) {
+            if (!quitting.get()) {
                 System.out.println("Соединение с сервером потеряно.");
+            }
         }
     }
 
